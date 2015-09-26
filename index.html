@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Awfulizer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<style type="text/css">
+		#awfulizeBtn {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+		.prompt {
+			color: grey;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+
+		<div class="row">
+			<div class="jumbotron">
+			  <div class="container">
+				<h1>Awfulizer</h1>
+				<p>
+					EVER HAVE SOMEONE EMAIL/TEXT YOU IN CAPS LIKE THEY WERE YELLING, BUT WEREN'T?
+				</p>
+				<p>
+					Reply with some painfully hard-to read 'awfulized' text
+					that is your own passive-aggressive way of saying 'tHAnk5'...!
+				</p>
+			  </div>
+			</div>
+		</div>
+
+		<div id="controls" class="row">
+			<div class="col-sm-12 panel panel-default">
+				<span class="panel-body col-xs-12 col-md-10">
+					<div class="col-xs-12 col-sm-6 col-md-4">
+						Numbers for letters
+						 <div class="btn-group btn-toggle">
+			    			<button id="numbers_1" class="btn btn-xs btn-default">Yes</button>
+			    			<button id="numbers_0" class="btn btn-xs btn-primary active">No</button>
+			  			</div>
+			  		</div>
+					<div class="col-xs-12 col-sm-6 col-md-4">
+						Drop some vowels
+						 <div class="btn-group btn-toggle">
+			    			<button id="vowels_1" class="btn btn-xs btn-default">Yes</button>
+			    			<button id="vowels_0" class="btn btn-xs btn-primary active">No</button>
+			  			</div>
+			  		</div>
+				</span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<textarea id="inputText" style="width:100%;" rows="20"></textarea>
+			</div>
+		</div>
+
+		<div class="row">
+			<input type="button" id="awfulizeBtn" class="awfulize col-xs-10 col-xs-offset-1 btn btn-primary btn-md" value="Awfulize It!" onclick="startProcess();"/>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<textarea id="outputText" style="width:100%;" rows="20" ></textarea>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="awfulize.js"></script>
+
+	<script>
+		$( document ).ready(function() {
+			var promptTextVal = "Add your text here.";
+			$("#inputText").addClass("prompt").val(promptTextVal);	// Set initial prompting.
+
+			// Identify the input/output elements
+			awfulize.setInput($("#inputText"));
+			awfulize.setOutput($("#outputText"));
+
+			// Handle prompting in textarea
+			$("#inputText").on("focus", function(){
+				if($(this).hasClass("prompt")){
+					$(this).removeClass("prompt");
+					$(this).val('');
+				}
+			});
+			$("#inputText").on("blur", function(){
+				if($(this).val().trim() == ''){
+					$(this).addClass("prompt");
+					$(this).val(promptTextVal);
+				}
+			});
+		});
+
+
+		// Toggle slider button actions.
+		$('.btn-toggle').click(function() {
+		    $(this).find('.btn').toggleClass('active');  
+		    
+		    if ($(this).find('.btn-primary').size()>0) {
+		    	$(this).find('.btn').toggleClass('btn-primary');
+		    }
+		    $(this).find('.btn').toggleClass('btn-default');
+		});
+
+
+		// Get the toggle options.
+		function getOptions(){
+			var options = {};
+
+			// Find 'active' buttons and extract name and 0/1 from it.
+			$(".btn.active").each(function(index, value){
+				var parts = $(this)[0].id.split("_");
+				options[parts[0]] = parts[1] === '1' ? true : false;
+			});
+
+			return options;
+		}
+
+		// Process the input
+		function startProcess(){
+			awfulize.setOptions(getOptions());
+			awfulize.run();
+		}
+	</script>
+
+</body>
+</html>
