@@ -56,20 +56,80 @@
 			.replace(/B/g, "8")
 			//.replace(/P/g, "9")
 			.replace(/O/g, "0");
+
+
+		var output = "",
+			chr = "",
+			ignoreWord = false;
+			
+		for ( var i = 0; i < text.length; i++ ) {
+			chr = text.charAt(i);
+
+			// Ignore words starting with '#' which are Twitter hashtags.
+			if(ignoreWord && chr === ' '){
+				ignoreWord = false;
+			}
+
+			if(!ignoreWord && chr === '#') {
+				ignoreWord = true;
+			}
+
+			if(!ignoreWord) {
+				if (chr === 'S') {
+					output += '5';
+				} else {
+					output += chr;
+				}
+
+				if (chr === 'B') {
+					output += '8';
+				} else {
+					output += chr;
+				}
+
+				if (chr === 'O') {
+					output += '0';
+				} else {
+					output += chr;
+				}
+			} else {
+				output += chr;
+			}
+		}
+		return output;
+
+
 	}
 
 
 	// Removes random vowels from text.
 	function dropSomeVowels (text) {
-		var output = "";
+		var output = "",
+			chr = "",
+			ignoreWord = false;
+
 		for ( var i = 0; i < text.length; i++ ) {
 			chr = text.charAt(i);
-			if(chr.match(/[aeiou]/gi) !== null) {		// If vowel?
-				if(randomBoolean()) {					// If true, keep it
-					output += chr;
+
+			// Ignore words starting with '#' which are Twitter hashtags.
+			if(ignoreWord && chr === ' '){
+				ignoreWord = false;
+			}
+
+			if(!ignoreWord && chr === '#') {
+				ignoreWord = true;
+			}
+
+			if(!ignoreWord) {	
+				if(chr.match(/[aeiou]/gi) !== null) {		// If vowel?
+					if(randomBoolean()) {					// If true, keep it
+						output += chr;
+					}
+				} else {
+					output += chr;		// constenant
 				}
 			} else {
-				output += chr;		// constanant
+				output += chr;
 			}
 		}
 		return output;
